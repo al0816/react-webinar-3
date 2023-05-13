@@ -73,8 +73,7 @@ class Store {
           item.selected = !item.selected;
           item.selectedCount ? item.selectedCount++ :item.selectedCount=1 ;
         }
-        else
-        {
+        else {
           item.selected = false;
         }
 
