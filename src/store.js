@@ -1,56 +1,50 @@
-import {generateCode} from "./utils";
-
-/**
- * Хранилище состояния приложения
- */
 class Store {
-  constructor(initState = {}) {
-    this.state = initState;
-    this.listeners = []; // Слушатели изменений состояния
+  constructor(initState = {list: [], cart: []}) {
+  this.state = initState;
+  if (!Object.hasOwn(initState, 'cart')) {
+    this.state.cart = [];
   }
+  this.listeners = []; // Слушатели изменений состояния
+}
 
-  /**
-   * Подписка слушателя на изменения состояния
-   * @param listener {Function}
-   * @returns {Function} Функция отписки
-   */
   subscribe(listener) {
     this.listeners.push(listener);
-    // Возвращается функция для удаления добавленного слушателя
     return () => {
       this.listeners = this.listeners.filter(item => item !== listener);
     }
   }
-
-  /**
-   * Выбор состояния
-   * @returns {Object}
-   */
   getState() {
     return this.state;
   }
 
-  /**
-   * Установка состояния
-   * @param newState {Object}
-   */
   setState(newState) {
     this.state = newState;
-    // Вызываем всех слушателей
     for (const listener of this.listeners) listener();
   }
 
-  /**
-   * Добавление новой записи
-   */
-  addItem(code) {
+  Delete_item(code) {
     this.setState({
       ...this.state,
-    })
+      cart: [...this.state.cart.filter((item) => item.code !== code)]
+    });
+  }
+
+  addToCart(code) {
+    const newItem = this.state.list.find(item => item.code === code);
+    const Item_exists = this.state.cart.find((item) => item.code === newItem.code);
+    if(Item_exists) {
+      this.setState({
+        ...this.state,
+        cart: [
+          ...this.state.cart.filter((item) => item.code !== newItem.code),
+          {...Item_exists, quantity: Item_exists.quantity + 1}
+        ]
+      });
+    } else {
+      this.setState({...this.state, cart: [...this.state.cart, {...newItem, quantity: 1}]});
+    }
   };
-  onOpenCart() {
-    console.log("cart тык")
-  };
+
 }
 
 export default Store;

@@ -1,51 +1,47 @@
-import React, {useState} from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import {plural} from "../../utils";
 import './style.css';
+import '../page-layout/style.css';
 
 function Item(props){
 
-  // Счётчик выделений
-  const [count, setCount] = useState(0);
-
-  const callbacks = {
-    onOpenCart: (e) => {
-      e.stopPropagation();
-     ////
+    const callbacks = {
+        onAction: (e) => {
+            e.stopPropagation();
+            props.onAction(props.item.code);
+        }
     }
-  }
+    const isQuantity = Object.hasOwn(props.item, 'quantity');
 
-  return (
-    <div className='Item'>
-      <div className='Item-code'>{props.item.code}</div>
-      <div className='Item-title'>
-        {props.item.title}
-      </div>
-      <div className='Item-price'>
-        {props.item.price}&nbsp;₽
-      </div>
-      <div className='Item-actions'>
-        <button onClick={callbacks.onAddToCart}>
-          Добавить
-        </button>
-      </div>
-    </div>
-  );
+    return (
+        <div className={'Item'}>
+            <div className='Item-code'>{props.item.code}</div>
+            <div className='Item-title'>
+                <span>{props.item.title}</span>
+                <span>{props.item.price} &#8381;</span>
+            </div>
+            {isQuantity && <p className={'Item-quantity'}>{props.item.quantity} шт</p>}
+            <div className='Item-actions'>
+                <button className='button_pointer' onClick={callbacks.onAction}>
+                    {isQuantity ? 'Удалить' : 'Добавить'}
+                </button>
+            </div>
+        </div>
+    );
 }
 
 Item.propTypes = {
-  item: PropTypes.shape({
-    code: PropTypes.number,
-    title: PropTypes.string,
-    selected: PropTypes.bool,
-    count: PropTypes.number
-  }).isRequired,
-  onAddToCart: PropTypes.func,
-  onSelect: PropTypes.func
+    item: PropTypes.shape({
+        code: PropTypes.number.isRequired,
+        title: PropTypes.string.isRequired,
+        price: PropTypes.number.isRequired,
+        quantity: PropTypes.number
+    }).isRequired,
+    onAddToCart: PropTypes.func
 };
 
 Item.defaultProps = {
-  onAddToCart: () => {},
+    onAddToCart: () => {}
 }
 
 export default React.memo(Item);

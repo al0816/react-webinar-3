@@ -1,36 +1,26 @@
-import React from "react";
+import React from 'react';
 import './style.css';
-
-function Cart({ isOpen, onClose, cartItems, total }) {
-    if (!isOpen) {
-        return null;
-    }
-
+import Head from "../head";
+import List from "../list";
+import {Sum_total} from "../../utils";
+export function Cart({cart, onDoSmth, onClose}) {
     return (
-        <div className="Cart">
-            <div className="Cart-header">
-                <h2>Корзина</h2>
-                <button className="Cart-closeButton" onClick={onClose}>
-                    Закрыть
-                </button>
+        <>
+            <div className={'background'}/>
+            <div className={'Cart'}>
+                <Head title='Корзина'>
+                    <button className={'button_pointer'} onClick={onClose}>Закрыть</button>
+                </Head>
+                {cart.length > 0 ?
+                    <div>
+                        <List onAction={onDoSmth} list={cart}/>
+                        <div className={'total-block'}>
+                            <span>Итого</span>
+                            <span className={'total-value'}>{Sum_total(cart)} &#8381;</span>
+                        </div>
+                    </div>
+                    : <p className={'info-empty'}>Корзина пуста</p>}
             </div>
-            <ul className="Cart-items">
-                {cartItems.map((item) => (
-                    <li key={item.code} className="Cart-item">
-                        <span className="Cart-itemTitle">{item.title}</span>
-                        <span className="Cart-itemQuantity">{item.quantity}</span>
-                        <button
-                            className="Cart-removeButton"
-                            onClick={() => onRemoveItem(item.code)}
-                        >
-                            Удалить
-                        </button>
-                    </li>
-                ))}
-            </ul>
-            <div className="Cart-total">Общая сумма: {total}₽</div>
-        </div>
+        </>
     );
 }
-
-export default Cart;

@@ -1,33 +1,36 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import List from "./components/list";
 import Controls from "./components/controls";
 import Head from "./components/head";
 import PageLayout from "./components/page-layout";
-import Cart from "./components/cart";
+import {Sum_total} from "./utils";
+import {Cart} from "./components/cart";
 
-/**
- * Приложение
- * @param store {Store} Хранилище состояния приложения
- * @returns {React.ReactElement}
- */
 function App({store}) {
-  const list = store.getState().list;
 
+    const {cart, list} = store.getState();
+    const [Modal_visible, setModal_visible] = useState(false);
 
-  const callbacks = {
-    onOpenCart: useCallback((code) => {
-      store.onOpenCart();
-    }, [store]),
+    const callbacks = {
+        onAddToCart: useCallback((code) => {
+            store.addToCart(code);
+        }, [store]),
+        onDelete_item: useCallback((code) => {
+            store.Delete_item(code);
+        },[store]),
+        onModal_visible: useCallback(() => {
+            setModal_visible(!Modal_visible);
+        }, [Modal_visible])
+    }
 
-
-  }
-  return (
-    <PageLayout>
-      <Head title='Магазин'/>
-      <Controls onAdd={callbacks.onOpenCart} />
-      <List list={list}/>
-    </PageLayout>
-  );
+    return (
+        <PageLayout>
+            {Modal_visible ? <Cart cart={cart} onDoSmth={callbacks.onDelete_item} onClose={callbacks.onModal_visible} /> : ""}
+            <Head title='Магазин'/>
+            <Controls itemsCount={cart.length} sum={Sum_total(cart)} onOpenCart_button={callbacks.onModal_visible}/>
+            <List list={list} onAction={callbacks.onAddToCart} />
+        </PageLayout>
+    );
 }
 
 export default App;
