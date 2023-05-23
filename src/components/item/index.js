@@ -2,11 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import './style.css';
 import '../page-layout/style.css';
+import {Format_Price} from "../../utils";
 
 function Item(props){
 
     const callbacks = {
-        onAction: (e) => {
+        onDosmth: (e) => {
             e.stopPropagation();
             props.onAction(props.item.code);
         }
@@ -18,11 +19,11 @@ function Item(props){
             <div className='Item-code'>{props.item.code}</div>
             <div className='Item-title'>
                 <span>{props.item.title}</span>
-                <span>{props.item.price} &#8381;</span>
+                <span>{Format_Price(props.item.price)} &#8381;</span>
             </div>
             {isQuantity && <p className={'Item-quantity'}>{props.item.quantity} шт</p>}
             <div className='Item-actions'>
-                <button className='button_pointer' onClick={callbacks.onAction}>
+                <button className='button_pointer' onClick={callbacks.onDosmth}>
                     {isQuantity ? 'Удалить' : 'Добавить'}
                 </button>
             </div>

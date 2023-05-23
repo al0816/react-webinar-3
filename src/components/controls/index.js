@@ -2,14 +2,14 @@ import React from "react";
 import PropTypes from 'prop-types';
 import './style.css';
 import '../page-layout/style.css';
-import {Plurals} from "../../utils";
+import {Format_Price, Plurals} from "../../utils";
 function Controls({itemsCount, sum, onOpenCart_button}){
     return (
         <div className='Controls'>
             <div>В корзине: </div>
             <div className={'control-info'}>
                 {itemsCount > 0 ?
-                    <span>{itemsCount} товар{Plurals(itemsCount)} / {sum} &#8381;</span> :
+                    <span>{itemsCount} товар{Plurals(itemsCount)} / {Format_Price(sum)} &#8381;</span> :
                     <span>Пусто</span>
                 }
             </div>

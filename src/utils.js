@@ -16,3 +16,7 @@ export const Plurals = (n) => {
   let suffix = suffixes.get(rule);
   return `${suffix}`;
 };
+
+export function Format_Price(value) {
+  return new Intl.NumberFormat('ru-RU').format(value);
+}

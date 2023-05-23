@@ -3,6 +3,7 @@ import './style.css';
 import Head from "../head";
 import List from "../list";
 import {Sum_total} from "../../utils";
+import {Format_Price} from "../../utils";
 export function Cart({cart, onDoSmth, onClose}) {
     return (
         <>
@@ -16,7 +17,7 @@ export function Cart({cart, onDoSmth, onClose}) {
                         <List onAction={onDoSmth} list={cart}/>
                         <div className={'total-block'}>
                             <span>Итого</span>
-                            <span className={'total-value'}>{Sum_total(cart)} &#8381;</span>
+                            <span className={'total-value'}>{Format_Price(Sum_total(cart))} &#8381;</span>
                         </div>
                     </div>
                     : <p className={'info-empty'}>Корзина пуста</p>}
